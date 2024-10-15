@@ -132,6 +132,17 @@ return {
     end,
   },
   {
+    'folke/noice.nvim',
+    event = 'VeryLazy',
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      'MunifTanjim/nui.nvim',
+      'rcarriga/nvim-notify',
+    },
+  },
+  {
     'nvimdev/dashboard-nvim',
     event = 'VimEnter',
     dependencies = { { 'nvim-tree/nvim-web-devicons' } },

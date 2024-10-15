@@ -7,6 +7,8 @@ return {
       'WhoIsSethDaniel/mason-tool-installer.nvim',
       { 'j-hui/fidget.nvim', opts = {} },
       -- 'hrsh7th/cmp-nvim-lsp',
+      -- 'hrsh7th/cmp-cmdline',
+      { 'nvim-java/nvim-java' },
     },
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -124,13 +126,15 @@ return {
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
         -- ruff = {},
-        html = { filetypes = { 'html', 'twig', 'hbs' } },
-        cssls = {},
-        tailwindcss = {},
-        dockerls = {},
-        sqlls = {},
+        -- html = { filetypes = { 'html', 'twig', 'hbs' } },
+        -- cssls = {},
+        -- tailwindcss = {},
+        -- dockerls = {},
+        -- sqlls = {},
         jsonls = {},
-        yamlls = {},
+        -- yamlls = {},
+
+        jdtls = {},
 
         lua_ls = {
           settings = {
@@ -175,6 +179,11 @@ return {
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
+
+            if server_name == 'jdtls' then
+              require('java').setup()
+            end
+
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for tsserver)
