@@ -1,3 +1,5 @@
+default_shell "bash"
+
 // If you'd like to override the default keybindings completely, be sure to change "keybinds" to "keybinds clear-defaults=true"
 keybinds clear-defaults=true {
     normal {
@@ -145,7 +147,6 @@ keybinds clear-defaults=true {
         bind "x" { CloseFocus; SwitchToMode "Normal"; }
     }
     shared_except "locked" {
-        bind "Esc" { SwitchToMode "Normal"; }
         bind "Alt g" { SwitchToMode "Locked"; }
         bind "Alt q" { Quit; }
         bind "Alt p" { SwitchToMode "Pane"; }
@@ -167,9 +168,9 @@ keybinds clear-defaults=true {
         // bind "Alt [" { PreviousSwapLayout; }
         // bind "Alt ]" { NextSwapLayout; }
     }
-    // shared_except "normal" "locked" {
-    //     bind "Enter" "Esc" { SwitchToMode "Normal"; }
-    // }
+    shared_except "normal" "locked" {
+        bind "Enter" "Esc" { SwitchToMode "Normal"; }
+    }
     // shared_except "pane" "locked" {
     //     bind "Ctrl p" { SwitchToMode "Pane"; }
     // }
@@ -226,7 +227,6 @@ plugins {
 // Default: $SHELL
 //
 // default_shell "fish"
-default_shell "zsh"
 
 // Choose the path to override cwd that zellij will use for opening new panes
 //
