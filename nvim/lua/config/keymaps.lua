@@ -1,6 +1,6 @@
 -- Set leader key
 vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+vim.g.maplocalleader = '\\'
 
 -- Disable the spacebar key's default behavior in Normal and Visual modes
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
@@ -11,36 +11,36 @@ local map = function(mode, lhs, rhs, desc)
 end
 
 -- Common actions
-map('n', '<leader>fw', '<cmd>w<cr>', 'Save file')
-map('n', '<C-s>', '<cmd>w<cr>', 'Save file')
-map('n', '<leader>fs', '<cmd>noautocmd w<cr>', 'Save file without formatting')
-map('n', '<leader>qq', '<cmd>q<cr>', 'Quit')
-map('n', '<C-q>', '<cmd>q<cr>', 'Quit')
-map('n', '<leader>qa', '<cmd>qa!<cr>', 'Quit all')
-map('n', '<leader>dw', '<cmd>close<cr>', 'Close windows')
+-- map('n', '<leader>fw', '<cmd>w<cr>', 'Save file')
+-- map('n', '<C-s>', '<cmd>w<cr>', 'Save file')
+-- map('n', '<leader>fs', '<cmd>noautocmd w<cr>', 'Save file without formatting')
+-- map('n', '<leader>qq', '<cmd>q<cr>', 'Quit')
+-- map('n', '<C-q>', '<cmd>q<cr>', 'Quit')
+-- map('n', '<leader>qa', '<cmd>qa!<cr>', 'Quit all')
+-- map('n', '<leader>dw', '<cmd>close<cr>', 'Close windows')
 
 -- Easier access to beginning and end of lines
-map('n', '<M-h>', '^', 'Go to beginning of line')
-map('n', '<M-l>', '$', 'Go to end of line')
+-- map('n', '<M-h>', '^', 'Go to beginning of line')
+-- map('n', '<M-l>', '$', 'Go to end of line')
 
 -- Vertical scroll and center
 map('n', '<C-d>', '<C-d>zz', 'Move down half page')
 map('n', '<C-u>', '<C-u>zz', 'Move up half page')
 
 -- Resize with arrows
-map('n', '<Up>', ':resize +2<CR>', 'Resize Windows')
-map('n', '<Down>', ':resize -2<CR>', 'Resize Windows')
-map('n', '<Left>', ':vertical resize +2<CR>', 'Resize Windows')
-map('n', '<Right>', ':vertical resize -2<CR>', 'Resize Windows')
+-- map('n', '<Up>', ':resize +2<CR>', 'Resize Windows')
+-- map('n', '<Down>', ':resize -2<CR>', 'Resize Windows')
+-- map('n', '<Left>', ':vertical resize +2<CR>', 'Resize Windows')
+-- map('n', '<Right>', ':vertical resize -2<CR>', 'Resize Windows')
 
 -- Buffers
 map('n', '<Tab>', ':bnext<CR>', 'Go to next buffer')
 map('n', '<S-l>', ':bnext<CR>', 'Go to next buffer')
 map('n', '<S-Tab>', ':bprevious<CR>', 'Go to previous buffer')
 map('n', '<S-h>', ':bprevious<CR>', 'Go to previous buffer')
-map('n', '<leader>bq', ':Bdelete!<CR>', 'Close buffer')
-map('n', '<leader>bx', ':Bdelete!<CR>', 'Close buffer')
-map('n', '<leader>bn', '<cmd> enew <CR>', 'Create a new buffer')
+-- map('n', '<leader>bq', ':Bdelete!<CR>', 'Close buffer')
+-- map('n', '<leader>bx', ':Bdelete!<CR>', 'Close buffer')
+-- map('n', '<leader>bn', '<cmd> enew <CR>', 'Create a new buffer')
 
 -- Window management
 map('n', '<leader>wv', '<C-w>v', 'Split window vertically')
@@ -55,13 +55,13 @@ map('n', '<C-h>', ':wincmd h<CR>', 'Navigate window to the left')
 map('n', '<C-l>', ':wincmd l<CR>', 'Navigate window to the right')
 
 -- Tabs
-map('n', '<leader>to', ':tabnew<CR>', 'Open a new tab')
-map('n', '<leader>tx', ':tabclose<CR>', 'Close current tab')
-map('n', '<leader>tn', ':tabn<CR>', 'Go to next tab')
-map('n', '<leader>tp', ':tabp<CR>', 'Go to previous tab')
+-- map('n', '<leader>to', ':tabnew<CR>', 'Open a new tab')
+-- map('n', '<leader>tx', ':tabclose<CR>', 'Close current tab')
+-- map('n', '<leader>tn', ':tabn<CR>', 'Go to next tab')
+-- map('n', '<leader>tp', ':tabp<CR>', 'Go to previous tab')
 
 -- Toggle line wrapping
-map('n', '<leader>lw', '<cmd>set wrap!<CR>', 'Toggle line wrap')
+-- map('n', '<leader>lw', '<cmd>set wrap!<CR>', 'Toggle line wrap')
 
 -- Some utilities
 

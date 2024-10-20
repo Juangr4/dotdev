@@ -58,7 +58,7 @@ return {
       },
       pickers = {
         find_files = {
-          file_ignore_patterns = { 'node_modules', '.git', '.venv' },
+          file_ignore_patterns = { 'node_modules', '.git', '.venv', '.gradle', 'target' },
           hidden = true,
         },
       },
@@ -109,5 +109,28 @@ return {
         prompt_title = 'Live Grep in Open Files',
       }
     end, { desc = '[S]earch [/] in Open Files' })
+
+    vim.api.nvim_create_autocmd('VimEnter', {
+      callback = function()
+        if vim.fn.argv(0) == '' then
+          require('telescope.builtin').find_files()
+        end
+      end,
+    })
+
+    local is_git_dir = function()
+      return os.execute 'git rev-parse --is-inside-work-tree >> /dev/null 2>&1'
+    end
+
+    local bufferPath = vim.fn.expand '%:p'
+    if vim.fn.isdirectory(bufferPath) ~= 0 then
+      local ts_builtin = require 'telescope.builtin'
+      vim.api.nvim_buf_delete(0, { force = true })
+      if is_git_dir() == 0 then
+        ts_builtin.git_files { show_untracked = true }
+      else
+        ts_builtin.find_files()
+      end
+    end
   end,
 }
