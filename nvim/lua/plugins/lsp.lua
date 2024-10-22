@@ -9,6 +9,7 @@ return {
       -- 'hrsh7th/cmp-nvim-lsp',
       -- 'hrsh7th/cmp-cmdline',
       { 'nvim-java/nvim-java' },
+      -- { 'pmizio/typescript-tools.nvim', dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' }, opts = {} },
     },
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -87,7 +88,16 @@ return {
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
+        ts_ls = {},
+        html = { filetypes = { 'html', 'twig', 'hbs' } },
+        cssls = {},
+        tailwindcss = {},
+        -- dockerls = {},
+        -- sqlls = {},
+
         jsonls = {},
+        -- yamlls = {},
+
         jdtls = {},
 
         lua_ls = {
