@@ -1,0 +1,35 @@
+(defwindow bar
+  :monitor 0
+  :exclusive true
+  :geometry (geometry :x "0%"
+                      :y "20px"
+                      :width "90%"
+                      :height "30px"
+                      :anchor "top center"
+  )
+  :stacking "fg"
+  :wm-ignore false
+
+  (box
+    :class "bar"
+    :halign "center"
+    :space-evenly true
+    :spacing 30
+
+    (box
+      :class "part"
+      :halign "center"
+      "LEFT"
+    )
+    (box
+      :class "part"
+      :halign "center"
+      "CENTER BAR"
+    )
+    (box
+      :class "part"
+      :halign "center"
+      "RIGHT"
+    )
+  )
+)

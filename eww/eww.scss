@@ -1,0 +1,10 @@
+* {
+  all: unset;
+  font-family: 'icomoon', 'ubuntu nerd font';
+  padding: 0;
+  margin: 0;
+  min-height: 0;
+  min-width: 0;
+}
+
+@import "./scss/bar.scss";
