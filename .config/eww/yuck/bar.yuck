@@ -93,10 +93,10 @@
 (defvar workspaces-text `{
   "1": "\\ue795",
   "2": "\\uf268",
-  "3": "Files",
-  "4": "Games",
-  "5": "Misc",
-  "6": "Other",
+  "3": "\\uf07b",
+  "4": "\\uf1b6",
+  "5": "\\uf126",
+  "6": "\\uef0a",
   "7": "VPN"
 }`)
 
