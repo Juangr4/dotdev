@@ -1,0 +1,17 @@
+(defwindow calendar-closer
+  :monitor 0
+  :stacking "fg"
+  :focusable false
+  :geometry (geometry :width "100%" :height "100%" :anchor "center")
+  (closer :window "calendar")
+)
+
+(defwindow calendar
+  :monitor 0
+  :stacking "overlay"
+  :geometry (geometry :anchor "top left")
+  (box
+    :class "calendar"
+    (calendar)
+  )
+)

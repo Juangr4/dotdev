@@ -1,0 +1,64 @@
+.bar {
+  padding: 10px;
+  background-color: transparent;
+  font-family: 'JetBrainsMono', 'icomoon';
+  color: $text;
+
+  .workspaces {
+    background-color: $base;
+    padding: 5px 10px;
+    border-radius: 10px;
+
+    button {
+      background-color: $surface0;
+      padding: 10px;
+      border-radius: 10px;
+
+      &.active {
+        background-color: $lavender;
+        color: $crust;
+      }
+
+      &.inactive {
+        background-color: $overlay0;
+      }
+
+      &:hover {
+        background-color: $rosewater;
+        color: $crust;
+      }
+    }
+  }
+
+}
+
+.powermenu-launcher {
+  padding: 0 10px;
+}
+
+.datetime {
+  padding: 0 10px;
+  border-radius: 5px;
+
+}
+
+.open {
+  background-color: $surface0;
+}
+
+.metric scale trough highlight {
+  all: unset;
+  background-color: $red;
+  color: #000;
+  border-radius: 10px;
+}
+
+.metric scale trough {
+  all: unset;
+  background-color: #4e4e4e;
+  border-radius: 50px;
+  min-height: 3px;
+  min-width: 50px;
+  margin-left: 10px;
+  margin-right: 20px;
+}

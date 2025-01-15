@@ -1,0 +1,172 @@
+
+(defwidget bar []
+  (centerbox
+    :orientation "h"
+    :class "bar"
+    (left_modules)
+    (center_modules)
+    (right_modules)
+  )
+)
+
+(defwidget left_modules []
+  (box :class "modules"
+    :orientation "h"
+    :halign "start"
+    :spacing 10
+    :space-evenly true
+    (box :halign "start"
+      :spacing 15
+      :space-evenly false
+      (powermenu_launcher)
+      (music)
+      (datetime)
+    )
+  )
+)
+
+(defwidget center_modules []
+  (box :class "modules"
+    :orientation "h"
+    :halign "center"
+    :spacing 10
+    :space-evenly true
+    (workspaces)
+  )
+)
+
+(defwidget right_modules []
+  (box :class "modules"
+    :orientation "h"
+    :halign "end"
+    :valign "center"
+    :spacing 5
+    :space-evenly false
+    ; RAM
+    (metric :label '\\ue612'
+            :value {EWW_RAM.used_mem_perc}
+            :onchange "")
+    ; DISK
+    (metric :label '\\uf0c7'
+            :value {round( (1 - EWW_DISK["/"].free / EWW_DISK["/"].total) * 100, 0)}
+            :onchange "")
+    ; CPU
+    (metric :label '\\uf4bc'
+            :value {EWW_CPU.avg}
+            :onchange "")
+    (network)
+  )
+)
+
+(defvar open_powermenu false)
+(defwidget powermenu_launcher []
+    (eventbox
+      :cursor "pointer"
+      :class "powermenu-launcher ${ open_powermenu ? "open" : "" }"
+      :onclick "./scripts/window-toggler.sh powermenu &"
+      (box :class "powermenu-launcher"
+        (label :text "\\uf359")
+      )
+    )
+)
+
+(defwidget music []
+    (eventbox
+      :cursor "pointer"
+      (box "\\uf001 ")
+    )
+)
+
+(defvar open_calendar false)
+(defwidget datetime []
+  (eventbox
+    :cursor "pointer"
+    :onclick "./scripts/window-toggler.sh calendar &"
+    :class `datetime ${open_calendar ? "open" : "" }`
+    (box :class "datetime"
+      (label :text {formattime(EWW_TIME, "%a %d %b %_H:%_M")})
+    )
+  )
+)
+
+(deflisten workspaces "scripts/workspaces.sh")
+(defvar workspaces-text `{
+  "1": "\\ue795",
+  "2": "\\uf268",
+  "3": "Files",
+  "4": "Games",
+  "5": "Misc",
+  "6": "Other",
+  "7": "VPN"
+}`)
+
+(defwidget workspaces []
+  (box :class "workspaces"
+    :orientation "h"
+    :halign "start"
+    :valign "center"
+    :spacing 10
+    :space-evenly true
+    (for ws in "[1,2,3,4,5,6,7]"
+      (button
+        :onclick `hyprctl dispatch workspace ${ws}`
+        :width 30
+        :height 30
+        :class {
+          workspaces[ws - 1] == 1 ? "active" :
+          workspaces[ws - 1] == 2 ? "inactive" :
+          "free"
+        }
+        (label
+          :text `${workspaces-text[ws]}`
+        )
+      )
+    )
+  )
+)
+
+
+(defwidget metric [label value onchange]
+  (box :class "metric"
+    :orientation "h"
+    :space-evenly false
+    (box label)
+    (scale
+      :min 0
+      :max 101
+      :active {onchange != ""}
+      :value value
+      :onchange onchange)
+  )
+)
+
+(deflisten network_info :initial "{}" "scripts/network.sh")
+(defwidget network []
+  (eventbox
+    :cursor "pointer"
+    (box
+      :class "network"
+      (label
+        :text {
+          network_info.type =~ "ethernet" ? "\\uef44" :
+          network_info.type =~ "wifi" ? "?" : "\\uf1eb"
+
+        }
+      )
+      (label
+        :text { network_info.localIP == "" ? "?.?.?.?" : network_info.localIP }
+      )
+    )
+  )
+)
+
+(defwindow bar
+  :exclusive true
+  :monitor 0
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "95%"
+                      :height "10px"
+                      :anchor "top center")
+  (bar)
+)
