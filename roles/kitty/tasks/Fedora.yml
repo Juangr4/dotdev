@@ -1,0 +1,7 @@
+---
+- name: "Kitty | Install"
+  ansible.builtin.dnf:
+    name: "kitty"
+    state: present
+  become: true
+

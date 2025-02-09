@@ -1,0 +1,12 @@
+---
+- name: "Git | Set init.defaultBranch"
+  community.general.git_config:
+    scope: global
+    name: init.defaultBranch
+    value: "main"
+
+- name: "Git | Set user.name"
+  community.general.git_config:
+    scope: global
+    name: user.name
+    value: "{{ git_user_name }}"

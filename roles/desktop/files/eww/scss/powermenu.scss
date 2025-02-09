@@ -1,0 +1,16 @@
+.powermenu {
+  background-color: transparent;
+
+  .item {
+    // background-color: #3a3a3a;
+    background-color: $base;
+    color: $text;
+    border-radius: 10px;
+    margin: 5px;
+    font-size: 1.5em;
+
+    &>* {
+      margin: 15px;
+    }
+  }
+}

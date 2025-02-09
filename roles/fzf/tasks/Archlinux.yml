@@ -1,0 +1,9 @@
+---
+- name: "FZF | Install"
+  ansible.builtin.package:
+    name:
+    - fzf
+    - fd
+    state: present
+  become: true
+

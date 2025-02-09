@@ -1,0 +1,3 @@
+(defwidget closer [window]
+  (eventbox :onclick "./scripts/window-toggler.sh ${window} &")
+)

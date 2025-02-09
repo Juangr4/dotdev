@@ -1,0 +1,7 @@
+---
+- name: "BTOP | Install"
+  ansible.builtin.dnf:
+    name: "btop"
+    state: present
+  become: true
+

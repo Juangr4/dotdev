@@ -1,0 +1,48 @@
+---
+# sudo apt update -y && sudo apt install -y gpg sudo wget curl
+# sudo install -dm 755 /etc/apt/keyrings
+# wget -qO - https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | sudo tee /etc/apt/keyrings/mise-archive-keyring.gpg 1> /dev/null
+# echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=amd64] https://mise.jdx.dev/deb stable main" | sudo tee /etc/apt/sources.list.d/mise.list
+# sudo apt update
+# sudo apt install -y mise
+- name: "MISE | Install Dependencies"
+  ansible.builtin.apt:
+    name:
+    - gpg
+    - wget
+    - curl
+    state: present
+  become: true
+
+- name: "MISE | Create Keyrings Directory"
+  ansible.builtin.shell: "install -dm 755 /etc/apt/keyrings"
+  become: true
+
+- name: "MISE | Check MISE GPG Key"
+  ansible.builtin.stat:
+    path: "/etc/apt/keyrings/mise-archive-keyring.gpg"
+  register: mise_gpg_key
+
+- name: "MISE | Add MISE GPG Key"
+  ansible.builtin.shell: "wget -qO - https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | tee /etc/apt/keyrings/mise-archive-keyring.gpg 1> /dev/null"
+  become: true
+  when: not mise_gpg_key.stat.exists
+
+- name: "MISE | Add MISE Repository"
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=amd64] https://mise.jdx.dev/deb stable main"
+    state: present
+    filename: "mise.list"
+    update_cache: yes
+  become: true
+
+# - name: "MISE | Update APT Cache"
+#   ansible.builtin.apt:
+#     update_cache: yes
+#   become: true
+
+- name: "MISE | Install MISE"
+  ansible.builtin.apt:
+    name: "mise"
+    state: present
+  become: true

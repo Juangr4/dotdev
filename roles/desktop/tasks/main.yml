@@ -1,0 +1,58 @@
+---
+- name: "Desktop | Checking for Distribution Config: {{ ansible_distribution }}"
+  ansible.builtin.stat:
+    path: "{{ role_path }}/tasks/{{ ansible_distribution }}.yml"
+  register: distribution_config
+
+- name: "Desktop | Run Tasks: {{ ansible_distribution }}"
+  ansible.builtin.include_tasks: "{{ ansible_distribution }}.yml"
+  when: distribution_config.stat.exists and not ansible_host_environment_is_wsl
+
+- name: "Desktop | Deploy Cava Configs"
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/cava"
+    dest: "{{ ansible_user_dir }}/.config"
+  when: not ansible_host_environment_is_wsl
+
+- name: "Desktop | Deploy EWW Configs"
+  block:
+    - name: "Files"
+      ansible.builtin.copy:
+        src: "{{ role_path }}/files/eww"
+        dest: "{{ ansible_user_dir }}/.config"
+    - name: "Scripts"
+      ansible.builtin.find:
+        paths: "{{ ansible_user_dir }}/.config/eww/scripts"
+        file_type: file
+      register: eww_scripts
+    - name: "Make Executable"
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        mode: 0755
+      loop: "{{ eww_scripts.files }}"
+  when: not ansible_host_environment_is_wsl
+
+- name: "Desktop | Deploy Hypr Configs"
+  block:
+    - name: "Files"
+      ansible.builtin.copy:
+        src: "{{ role_path }}/files/hypr"
+        dest: "{{ ansible_user_dir }}/.config"
+    - name: "Scripts"
+      ansible.builtin.find:
+        paths: "{{ ansible_user_dir }}/.config/hypr/scripts"
+        file_type: file
+      register: hypr_scripts
+    - name: "Make Executable"
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        mode: 0755
+      loop: "{{ hypr_scripts.files }}"
+  when: not ansible_host_environment_is_wsl
+
+- name: "Desktop | Deploy Rofi Configs"
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/rofi"
+    dest: "{{ ansible_user_dir }}/.config"
+  when: not ansible_host_environment_is_wsl
+

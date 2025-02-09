@@ -1,0 +1,35 @@
+---
+- name: "MISE | Check if mise is installed"
+  ansible.builtin.shell:
+    cmd: "command -v mise"
+  ignore_errors: true
+  register: mise_exists
+
+- name: "MISE | Install Mise"
+  block:
+    - name: "MISE | Check makepkf conf"
+      ansible.builtin.lineinfile:
+        path: "/etc/makepkg.conf"
+        line: "OPTIONS=(strip docs !libtool !staticlibs emptydirs zipmap purge !debug lto)"
+        regexp: "^OPTIONS="
+        state: present
+      become: true
+
+    - name: "MISE | Clone mise repo"
+      ansible.builtin.git:
+        repo: "https://aur.archlinux.org/mise.git"
+        dest: "/tmp/mise"
+
+    - name: "MISE | Install dependencies"
+      ansible.builtin.package:
+        name:
+        - fakeroot
+        - pkg-config
+        state: present
+      become: true
+
+    - name: "MISE | Makepkg"
+      ansible.builtin.shell:
+        cmd: "makepkg -si --noconfirm"
+        chdir: "/tmp/mise"
+  when: mise_exists.rc != 0

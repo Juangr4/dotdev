@@ -1,0 +1,7 @@
+---
+- name: "LazyGit | Install"
+  ansible.builtin.package:
+    name: lazygit
+    state: present
+  become: true
+

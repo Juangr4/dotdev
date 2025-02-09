@@ -1,0 +1,22 @@
+---
+- name: "Starship | Checking for Distribution Config: {{ ansible_distribution }}"
+  ansible.builtin.stat:
+    path: "{{ role_path }}/tasks/{{ ansible_distribution }}.yml"
+  register: distribution_config
+
+- name: "Starship | Run Tasks: {{ ansible_distribution }}"
+  ansible.builtin.include_tasks: "{{ ansible_distribution }}.yml"
+  when: distribution_config.stat.exists
+
+- name: "Starship | Deploy Config File"
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/starship.toml"
+    dest: "{{ ansible_user_dir }}/.config/starship.toml"
+
+- name: "Starship | Add Starship inside .bashrc"
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_user_dir }}/.bashrc"
+    regexp: 'eval "$(starship init bash)"'
+    line: 'eval "$(starship init bash)"'
+    state: present
+    insertbefore: EOF

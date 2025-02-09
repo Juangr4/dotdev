@@ -1,0 +1,12 @@
+---
+- name: "Discord | Add flathub beta to flatpak"
+  community.general.flatpak_remote:
+    name: "flathub-beta"
+    state: present
+    flatpakrepo_url: "https://flathub.org/beta-repo/flathub-beta.flatpakrepo"
+
+- name: "Discord | Install"
+  community.general.flatpak:
+    name: "com.discordapp.DiscordCanary"
+    state: present
+

@@ -1,0 +1,12 @@
+---
+- name: "ZSH | Install"
+  ansible.builtin.apt:
+    name: "zsh"
+    state: present
+  become: true
+
+- name: "ZSH | Set Default Shell"
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    shell: "/bin/zsh"
+  become: true

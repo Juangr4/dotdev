@@ -1,0 +1,7 @@
+---
+- name: "Kitty | Install"
+  ansible.builtin.package:
+    name: "kitty"
+    state: present
+  become: true
+

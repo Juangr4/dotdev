@@ -1,0 +1,28 @@
+---
+# - name: "Zellij | Enable Varlad/zellij Corp"
+#   community.general.copr:
+#     name: "varlad/zellij"
+#     state: enabled
+#   become: true
+#
+# - name: "Zellij | Install"
+#   ansible.builtin.dnf:
+#     name: "zellij"
+#     state: present
+#   become: true
+
+- name: "Zellij | Download binary"
+  ansible.builtin.unarchive:
+    src: "https://github.com/zellij-org/zellij/releases/latest/download/zellij-{{ ansible_architecture }}-unknown-linux-musl.tar.gz"
+    dest: "/usr/local/bin"
+    remote_src: yes
+  become: true
+  when: ansible_architecture != "arm64"
+
+- name: "Zellij | Download binary Arm64"
+  ansible.builtin.unarchive:
+    src: "https://github.com/zellij-org/zellij/releases/latest/download/zellij-{{ ansible_architecture }}-unknown-linux-musl.tar.gz"
+    dest: "/usr/local/bin"
+    remote_src: yes
+  become: true
+  when: ansible_architecture == "arm64"

@@ -1,0 +1,19 @@
+---
+- name: "MISE | Install"
+  block:
+  - name: "MISE | Add Mise Repository"
+    block:
+    - name: "MISE | dnf plugins core"
+      ansible.builtin.dnf:
+        name: dnf-plugins-core
+        state: present
+      become: true
+    - name: "MISE | Add Mise Repository"
+      ansible.builtin.shell: "dnf-3 config-manager --add-repo https://mise.jdx.dev/rpm/mise.repo"
+      become: true
+  - name: "MISE | Install"
+    ansible.builtin.dnf:
+      name: "mise"
+      state: present
+    become: true
+

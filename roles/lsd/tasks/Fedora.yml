@@ -1,0 +1,7 @@
+---
+- name: "LSD | Install"
+  ansible.builtin.dnf:
+    name: "lsd"
+    state: present
+  become: true
+

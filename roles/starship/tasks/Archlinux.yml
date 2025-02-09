@@ -1,0 +1,6 @@
+---
+- name: "Starship | Install"
+  ansible.builtin.package:
+    name: "starship"
+    state: "present"
+  become: true

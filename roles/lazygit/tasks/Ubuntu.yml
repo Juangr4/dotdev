@@ -1,0 +1,27 @@
+---
+# curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*'
+- name: "LazyGit | Get latest version"
+  ansible.builtin.shell: "curl -s \"https://api.github.com/repos/jesseduffield/lazygit/releases/latest\" | \\grep -Po '\"tag_name\": *\"v\\K[^\"]*'"
+  register: lazygit_version
+
+# https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz
+- name: "LazyGit | Download latest binary"
+  ansible.builtin.get_url:
+    url: "https://github.com/jesseduffield/lazygit/releases/download/v{{ lazygit_version.stdout }}/lazygit_{{ lazygit_version.stdout }}_Linux_x86_64.tar.gz"
+    dest: "/tmp/lazygit.tar.gz"
+
+# tar xf lazygit.tar.gz lazygit
+- name: "LazyGit | Extract binary"
+  ansible.builtin.shell: "tar xf /tmp/lazygit.tar.gz lazygit"
+  args:
+    chdir: "/tmp"
+    creates: "/tmp/lazygit"
+
+# sudo install lazygit -D -t /usr/local/bin/
+- name: "LazyGit | Install binary"
+  ansible.builtin.shell: "install lazygit -D -t /usr/local/bin/"
+  args:
+    chdir: "/tmp"
+    creates: "/usr/local/bin/lazygit"
+  become: true
+

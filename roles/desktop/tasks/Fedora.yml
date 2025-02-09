@@ -1,0 +1,23 @@
+---
+- name: "Desktop | Enable Solopasha/hyprland Corp"
+  community.general.copr:
+    name: "solopasha/hyprland"
+    state: enabled
+  become: true
+
+- name: "Desktop | Install"
+  ansible.builtin.dnf:
+    name:
+    - hyprland
+    - hyprlock
+    - hyprpaper
+    - hyprpolkitagent
+    - eww
+    - cava
+    - rofi
+    - nautilus
+    - NetworkManager
+    - jq
+    state: present
+  become: true
+

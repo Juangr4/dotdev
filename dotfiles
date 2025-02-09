@@ -1,0 +1,73 @@
+#!/bin/bash
+
+SSH_DIR="$HOME/.ssh"
+DOTFILES_DIR="$HOME/.dotfiles"
+
+function fedora_setup() {
+  if ! [[ -x $(command -v ansible) ]]; then
+    echo "Installing Ansible..."
+    sudo dnf install -y ansible
+  fi
+}
+
+function ubuntu_setup() {
+  if ! [[ -x $(command -v ansible) ]]; then
+    echo "Installing Ansible..."
+    sudo apt install -y ansible
+  fi
+}
+
+function arch_setup() {
+  if ! [[ -x $(command -v ansible) ]]; then
+    echo "Installing Ansible..."
+    sudo pacman -S ansible --noconfirm
+  fi
+}
+
+# Setup SSH keys for the current user if they don't already exist.
+if ! [[ -d $SSH_DIR ]]; then
+  echo "Setting up SSH keys..."
+  mkdir -p $SSH_DIR
+  chmod 700 $SSH_DIR
+  ssh-keygen -b 4096 -t rsa -f $SSH_DIR/id_rsa -N "" -C $USER@$HOSTNAME
+  cat $SSH_DIR/id_rsa.pub > $SSH_DIR/authorized_keys
+  chmod 600 $SSH_DIR/authorized_keys
+fi
+
+# Detect the OS and run the appropriate setup function.
+os=$(uname -n)
+if [[ -f /etc/os-release ]]; then
+  source /etc/os-release
+  os=$ID
+fi
+
+case $os in
+  fedora)
+    fedora_setup
+    ;;
+  ubuntu)
+    ubuntu_setup
+    ;;
+  arch)
+    arch_setup
+    ;;
+  *)
+    echo "Unsupported OS: $os"
+    exit 1
+    ;;
+esac
+
+# Clone the dotfiles repository if it doesn't already exist.
+if ! [[ -d $DOTFILES_DIR ]]; then
+  echo "Cloning dotfiles repository..."
+  git clone "https://github.com/Juangr4/dotdev.git" $DOTFILES_DIR
+else
+  echo "Updating dotfiles repository..."
+  git -C $DOTFILES_DIR pull
+fi
+
+# Install galaxy requirements.
+ansible-galaxy install -r $DOTFILES_DIR/requirements.yml
+
+# Run the Ansible playbook.
+ANSIBLE_CONFIG=$DOTFILES_DIR/ansible.cfg ansible-playbook $DOTFILES_DIR/playbook.yml --ask-become-pass "$@"

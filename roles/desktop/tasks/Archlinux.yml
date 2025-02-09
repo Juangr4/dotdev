@@ -1,0 +1,63 @@
+---
+- name: "Desktop | Check if yay is installed"
+  ansible.builtin.shell:
+    cmd: "command -v yay"
+  ignore_errors: true
+  register: yay_exists
+
+- name: "Desktop | Install Yay Package Manager"
+  block:
+    - name: "Desktop | Check makepkf conf"
+      ansible.builtin.lineinfile:
+        path: "/etc/makepkg.conf"
+        line: "OPTIONS=(strip docs !libtool !staticlibs emptydirs zipmap purge !debug lto)"
+        regexp: "^OPTIONS="
+        state: present
+      become: true
+
+    - name: "Desktop | Install dependencies"
+      ansible.builtin.package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - base-devel
+        - make
+        - gcc
+        - fakeroot
+      become: true
+
+    - name: "Desktop | Clone yay repo"
+      ansible.builtin.git:
+        repo: "https://aur.archlinux.org/yay-bin.git"
+        dest: "/tmp/yay-bin"
+
+    - name: "Desktop | Makepkg"
+      ansible.builtin.shell:
+        cmd: "makepkg -si --noconfirm"
+        chdir: "/tmp/yay-bin"
+  when: yay_exists.rc != 0
+
+- name: "Desktop | Install Aur packages"
+  ansible.builtin.shell:
+    cmd: "yay -S --noconfirm {{ item }}"
+  loop:
+  - eww
+  - cava
+  become: true
+
+- name: "Desktop | Install"
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop:
+  - hyprland
+  - hyprlock
+  - hyprpaper
+  - hyprpolkitagent
+  - rofi
+  - nautilus
+  - sddm
+  - network-manager
+  - jq
+  become: true
+

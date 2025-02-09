@@ -1,0 +1,44 @@
+---
+- name: "LSD | Checking for Distribution Config: {{ ansible_distribution }}"
+  ansible.builtin.stat:
+    path: "{{ role_path }}/tasks/{{ ansible_distribution }}.yml"
+  register: distribution_config
+
+- name: "LSD | Run Tasks: {{ ansible_distribution }}"
+  ansible.builtin.include_tasks: "{{ ansible_distribution }}.yml"
+  when: distribution_config.stat.exists
+
+- name: "LSD | Create Config Directory"
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.config/lsd"
+    mode: "0755"
+    state: directory
+
+- name: "LSD | Copy Config File"
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/config.yaml"
+    dest: "{{ ansible_user_dir }}/.config/lsd/config.yaml"
+
+- name: "LSD | Copy Colors File"
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/colors.yaml"
+    dest: "{{ ansible_user_dir }}/.config/lsd/colors.yaml"
+
+# - name: "LSD | Setup alias inside .bashrc"
+#   ansible.builtin.lineinfile:
+#     path: "{{ ansible_user_dir }}/.bashrc"
+#     regexp: "alias ls="
+#     line: "alias ls='lsd'"
+#     state: present
+#     insertbefore: EOF
+
+- name: "LSD | Setup alias inside .bashrc"
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_user_dir }}/.bashrc"
+    marker: "# ANSIBLE MANAGED BLOCK - lsd"
+    block: |
+      alias ls='lsd'
+      alias ll='lsd -alF'
+      alias la='lsd -A'
+      alias l='lsd -CF'
+    insertbefore: EOF

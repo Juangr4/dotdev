@@ -1,0 +1,32 @@
+.calendar {
+  background-color: $base;
+  color: $text;
+  padding: 1em;
+  border-radius: 5px;
+
+
+  calendar {
+
+    &:selected {
+      background-color: $surface0;
+      border-radius: 5px;
+    }
+
+    &.header {
+      color: $text;
+    }
+
+    &.highlight {
+      background-color: transparent;
+    }
+
+    &.indeterminate {
+      color: $text;
+    }
+
+    font-size: 1.2em;
+    padding: .3em;
+
+  }
+
+}

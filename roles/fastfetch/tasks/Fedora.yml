@@ -1,0 +1,7 @@
+---
+- name: "Fastfetch | Install"
+  ansible.builtin.dnf:
+    name: "fastfetch"
+    state: present
+  become: true
+

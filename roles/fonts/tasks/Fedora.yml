@@ -1,0 +1,7 @@
+---
+- name: "Fonts | Install requirements"
+  ansible.builtin.dnf:
+    name: "unzip"
+    state: present
+  become: true
+

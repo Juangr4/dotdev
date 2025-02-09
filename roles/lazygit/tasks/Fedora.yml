@@ -1,0 +1,13 @@
+---
+- name: "LazyGit | Enable atim/lazygit Corp"
+  community.general.copr:
+    name: "atim/lazygit"
+    state: enabled
+  become: true
+
+- name: "LazyGit | Install"
+  ansible.builtin.dnf:
+    name: "lazygit"
+    state: present
+  become: true
+

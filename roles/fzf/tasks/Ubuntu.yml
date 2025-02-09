@@ -1,0 +1,9 @@
+---
+- name: "FZF | Install"
+  ansible.builtin.apt:
+    name:
+    - fzf
+    - fd-find
+    state: present
+  become: true
+

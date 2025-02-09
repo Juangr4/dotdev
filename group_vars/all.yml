@@ -1,0 +1,19 @@
+default_roles:
+  - kitty
+  - lsd
+  - bat
+  - fzf
+  - mise
+  - starship
+  - lazygit
+  - zellij
+  - neovim
+  - docker
+  - chrome
+  - discord
+  - btop
+  - yazi
+  - fonts
+  - desktop
+
+git_user_name: "Juangr4"

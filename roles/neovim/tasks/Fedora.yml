@@ -1,0 +1,9 @@
+---
+- name: "Neovim | Install"
+  ansible.builtin.dnf:
+    name:
+    - neovim
+    - gcc
+    state: present
+  become: true
+

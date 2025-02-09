@@ -1,0 +1,30 @@
+---
+- name: "FZF | Checking for Distribution Config: {{ ansible_distribution }}"
+  ansible.builtin.stat:
+    path: "{{ role_path }}/tasks/{{ ansible_distribution }}.yml"
+  register: distribution_config
+
+- name: "FZF | Run Tasks: {{ ansible_distribution }}"
+  ansible.builtin.include_tasks: "{{ ansible_distribution }}.yml"
+  when: distribution_config.stat.exists
+
+- name: "FZF | Check if fzf is inside .bashrc"
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_user_dir }}/.bashrc"
+    line: 'eval "$(fzf --bash)"'
+    state: present
+  check_mode: true
+  register: fzf_check
+
+- name: "FZF | Add fzf inside .bashrc"
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_user_dir }}/.bashrc"
+    marker: "# ANSIBLE MANAGED BLOCK - fzf"
+    block: |
+      eval "$(fzf --bash)"
+      export FZF_DEFAULT_COMMAND='fd --hidden --strip-cwd-prefix --exclude .git'
+      export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+      export FZF_ALT_C_COMMAND="fd --type d --hidden --strip-cwd-prefix --exclude .git"
+      export FZF_DEFAULT_OPTS='--height 50% --layout=default --border'
+    insertbefore: EOF
+  when: fzf_check.changed

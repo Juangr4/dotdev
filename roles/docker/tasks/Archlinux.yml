@@ -1,0 +1,10 @@
+---
+- name: "Docker | Install Docker Engine"
+  ansible.builtin.package:
+    name:
+      - docker
+      - docker-buildx
+      - docker-compose
+    state: present
+  become: true
+

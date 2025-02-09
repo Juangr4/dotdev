@@ -1,0 +1,16 @@
+---
+- name: "Neovim | Install"
+  ansible.builtin.apt:
+    name:
+    - gcc
+    state: present
+  become: true
+
+- name: "Neovim | Download binary"
+  ansible.builtin.unarchive:
+    src: "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-{{ ansible_architecture }}.tar.gz"
+    dest: "/usr/local/bin"
+    remote_src: yes
+  become: true
+  when: ansible_architecture in ["x86_64", "arm64"]
+

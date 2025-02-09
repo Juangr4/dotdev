@@ -1,0 +1,6 @@
+---
+- name: "Chrome | Install"
+  community.general.flatpak:
+    name: "com.google.Chrome"
+    state: present
+

@@ -1,0 +1,48 @@
+---
+- name: "Fonts | Checking for Distribution Config: {{ ansible_distribution }}"
+  ansible.builtin.stat:
+    path: "{{ role_path }}/tasks/{{ ansible_distribution }}.yml"
+  register: distribution_config
+
+- name: "Fonts | Run Tasks: {{ ansible_distribution }}"
+  ansible.builtin.include_tasks: "{{ ansible_distribution }}.yml"
+  when: distribution_config.stat.exists and not ansible_host_environment_is_wsl
+
+- name: "Fonts | Install Iosevka Nerd Fonts"
+  block:
+    - name: "Fonts | Check if Iosevka Nerd Fonts are installed"
+      ansible.builtin.stat:
+        path: "{{ ansible_user_dir }}/.local/share/fonts/Iosevka"
+      register: iosevka_nerd_fonts
+    - name: "Fonts | Create fonts directory"
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/.local/share/fonts/Iosevka"
+        state: directory
+      when: not iosevka_nerd_fonts.stat.exists
+    - name: "Fonts | Install Iosevka Nerd Fonts"
+      ansible.builtin.unarchive:
+        src: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/Iosevka.zip"
+        dest: "{{ ansible_user_dir }}/.local/share/fonts/Iosevka"
+        remote_src: true
+      when: not iosevka_nerd_fonts.stat.exists
+  when: not ansible_host_environment_is_wsl
+
+- name: "Fonts | Install JetBrains Mono Nerd Fonts"
+  block:
+    - name: "Fonts | Check if JetBrains Mono Nerd Fonts are installed"
+      ansible.builtin.stat:
+        path: "{{ ansible_user_dir }}/.local/share/fonts/JetBrainsMono"
+      register: jetbrains_mono_nerd_fonts
+    - name: "Fonts | Create fonts directory"
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/.local/share/fonts/JetBrainsMono"
+        state: directory
+      when: not jetbrains_mono_nerd_fonts.stat.exists
+    - name: "Fonts | Install JetBrains Mono Nerd Fonts"
+      ansible.builtin.unarchive:
+        src: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip"
+        dest: "{{ ansible_user_dir }}/.local/share/fonts/JetBrainsMono"
+        remote_src: true
+      when: not jetbrains_mono_nerd_fonts.stat.exists
+  when: not ansible_host_environment_is_wsl
+
