@@ -14,9 +14,9 @@ format = '[$symbol](bold white) '
 disabled = false
 
 [os.symbols]
-Windows = ''
+Windows = ''
 Arch = '󰣇'
-Ubuntu = ''
+Ubuntu = ''
 Macos = '󰀵'
 
 # ---
@@ -33,7 +33,7 @@ show_always = true
 [hostname]
 ssh_only = false
 format = 'on [$hostname](bold yellow) '
-disabled = false
+disabled = true
 
 # Shows current directory
 [directory]
@@ -42,7 +42,7 @@ truncation_symbol = '…/'
 home_symbol = '󰋜 ~'
 read_only_style = '197'
 read_only = '  '
-format = 'at [$path]($style)[$read_only]($read_only_style) '
+format = ' [$path]($style)[$read_only]($read_only_style) '
 
 # Shows current git branch
 [git_branch]

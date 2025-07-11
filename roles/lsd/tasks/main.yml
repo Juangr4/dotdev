@@ -24,15 +24,15 @@
     src: "{{ role_path }}/files/colors.yaml"
     dest: "{{ ansible_user_dir }}/.config/lsd/colors.yaml"
 
-# - name: "LSD | Setup alias inside .bashrc"
-#   ansible.builtin.lineinfile:
-#     path: "{{ ansible_user_dir }}/.bashrc"
-#     regexp: "alias ls="
-#     line: "alias ls='lsd'"
-#     state: present
-#     insertbefore: EOF
+- name: "LSD | Check if alias is inside .bashrc"
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_user_dir }}/.bashrc"
+    line: "alias ls='lsd'"
+    state: present
+  check_mode: true
+  register: lsd_check
 
-- name: "LSD | Setup alias inside .bashrc"
+- name: "LSD | Add lsd inside .bashrc"
   ansible.builtin.blockinfile:
     path: "{{ ansible_user_dir }}/.bashrc"
     marker: "# ANSIBLE MANAGED BLOCK - lsd"
@@ -42,3 +42,4 @@
       alias la='lsd -A'
       alias l='lsd -CF'
     insertbefore: EOF
+  when: lsd_check.changed
