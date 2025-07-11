@@ -83,22 +83,20 @@ $starshipConfigPath = Join-Path -Path $HOME -ChildPath "starship.toml"
 $starshipConfigUrl = "https://raw.githubusercontent.com/Juangr4/dotdev/refs/heads/master/roles/starship/files/starship.toml"
 
 Write-Host "Configuring Starship..."
-if (-not (Test-Path -Path $starshipConfigPath)) {
-    try {
-        Invoke-WebRequest -Uri $starshipConfigUrl -OutFile $starshipConfigPath
-        Write-Host "Successfully downloaded Starship configuration."
-    }
-    catch {
-        Write-Error "Error downloading Starship configuration: $($_.Exception.Message)"
-    }
-} else {
-    Write-Host "Starship configuration already exists."
+
+try {
+    Invoke-WebRequest -Uri $starshipConfigUrl -OutFile $starshipConfigPath -UseBasicParsing
+    Write-Host "Successfully downloaded and overwritten Starship configuration."
+}
+catch {
+    Write-Error "Error downloading Starship configuration: $($_.Exception.Message)"
 }
 
 # Setup Powershell Profile Configuration
 $profileUrl = "https://raw.githubusercontent.com/Juangr4/dotdev/refs/heads/master/profile.ps1"
 
 Write-Host "Configuring Powershell Profile..."
+
 if (-not (Test-Path -Path $profile)) {
     try {
         Invoke-WebRequest -Uri $profileUrl -OutFile $profile
@@ -108,7 +106,26 @@ if (-not (Test-Path -Path $profile)) {
         Write-Error "Error downloading Powershell Profile: $($_.Exception.Message)"
     }
 } else {
-    Write-Host "Powershell Profile already exists."
+    Write-Host "Powershell Profile already exists at: $profile"
+
+    $confirmation = Read-Host "Do you want to overwrite it? (Y/N)"
+    if ($confirmation -match '^[Yy]$') {
+        try {
+            # Backup existing profile
+            $backupPath = "$profile.bak"
+            Copy-Item -Path $profile -Destination $backupPath -Force
+            Write-Host "Backup created at: $backupPath"
+
+            # Download and overwrite
+            Invoke-WebRequest -Uri $profileUrl -OutFile $profile
+            Write-Host "Successfully overwritten Powershell Profile."
+        }
+        catch {
+            Write-Error "Error overwriting Powershell Profile: $($_.Exception.Message)"
+        }
+    } else {
+        Write-Host "Operation canceled. Existing profile was not overwritten."
+    }
 }
 
 Write-Host "Setup completed."
